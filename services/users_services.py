@@ -76,8 +76,8 @@ def login_user(id_no, password):
     
 
 #if worka
-user1 = register_user("123456", "Luie 1", "Pass1")
-user2 = register_user("123455", "Luie 2", "Pass1")
+#user1 = register_user("123456", "Luie 1", "Pass1")
+#user2 = register_user("123455", "Luie 2", "Pass1")
 
 # # Checks if user exists
 #register_user("123456", "Luie 1", "Pass1")

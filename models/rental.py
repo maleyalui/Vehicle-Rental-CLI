@@ -25,6 +25,6 @@ class Rental:
             "total_price": self.total_price
         }
     
-rental_1 = Rental(1, 1, 5)
-print(rental_1.to_dict())
-print(rental_1.status)
+# rental_1 = Rental(1, 1, 5)
+# print(rental_1.to_dict())
+# print(rental_1.status)
