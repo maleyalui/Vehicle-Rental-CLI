@@ -2,7 +2,10 @@
 
 #Import dependancies
 import getpass
-
+from auth import register_user, login_user
+from decorators import admin_required
+from services.vehicle_services import add_vehicle, list_vehicles
+from services.rental_services import rent_vehicle, return_vehicle
 #current_user = None
 
 #Start menu
@@ -21,7 +24,7 @@ def start_menu():
 
         #Choice 1
         if choice == "1":
-            Id = input("ID number: ")
+            id_no = input("ID number: ")
             name = input("Nmae: ")
             password = getpass.getpass("Password: ")
             role = input("Role: ")
@@ -30,19 +33,23 @@ def start_menu():
             if role == "":
                 role = "customer"
             #Implement func to register from auth
-
+            register_user(id_no,name,password,role)
 
         # Choice 2
 
         elif choice == "2":
-            Id = input("ID number: ")
+            id_no = input("ID number: ")
             password = getpass.getpass("Password: ")
             
             #Implement login func
-
+            user = login_user(id_no,password)
             #If login successfull, give him correct menu
+            if user:
+                if user["role"] == "admin":
+                    admin_menu(user)
+                else:
+                    customer_menu(user)
 
-        
         elif choice == "3":
             print("Goodbye!")
             print("Exiting System")
@@ -52,9 +59,9 @@ def start_menu():
 
 
 #The admin menu
-
+@admin_required
 #Pass the user
-def admin_menu():
+def admin_menu(user):
     while True:
         print("--- Admin Menu ---")
         print("1. Add Vehicle")
@@ -68,9 +75,10 @@ def admin_menu():
             model = input("Model name: ")
             price = int(input("Price per day: "))
             #call  the func to add vehicle
-        
-        # elif choice == "2":
+            add_vehicle(brand,model,price)
+        elif choice == "2":
         #List vehicles
+            list_vehicles()
 
         elif choice == "3":
             print("Logging out...")
@@ -84,7 +92,7 @@ def admin_menu():
 
 #pass user from start_menu()
 
-def customer_menu():
+def customer_menu(user):
     while True:
         print("--- Customer Menu ---")
         print("1. List Vehicles")
@@ -94,17 +102,18 @@ def customer_menu():
 
         choice = input("Enter Choice: ")
 
-        #if choice == "1":
+        if choice == "1":
         #List the vehicles
-        if choice == "2":
+            list_vehicles()
+        elif choice == "2":
             vehicle_id = int(input("Vehicle ID: "))
             days = int(input("Enter days to rent (max 14): "))
             #call thefunc to rent
-        
+            rent_vehicle(user, vehicle_id,days)
         elif choice == "3":
             vehicle_id = int(input("Vehicle ID: "))
             #the func to change status (return vehicle func)
-
+            return_vehicle(user,vehicle_id)
         elif choice == "4":
             print("Logging Out...")
             break
