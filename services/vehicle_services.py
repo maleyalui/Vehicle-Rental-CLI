@@ -12,8 +12,16 @@ def load_vehicles():
     if not os.path.exists(VEHICLE_FILE):
         return []
     with open(VEHICLE_FILE, "r") as f:
-        return json.load(f)
-
+        vehicles=json.load(f)
+    if len(vehicles) >0 :
+        max_id=vehicles[0]["id"]
+        for v in vehicles:
+            if v["id"] > max_id:
+                max_id = v["id"]
+        Vehicle.id_counter = max_id + 1
+    else :
+        Vehicle.id_counter =1
+    return vehicles
 #save vehilces
 def save_vehicles(vehicles):
     os.makedirs(os.path.dirname(VEHICLE_FILE), exist_ok=True)
